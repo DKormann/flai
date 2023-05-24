@@ -42,7 +42,7 @@
 
 <div class = content>
     <div class = display>
-        sdlkfjsdlkfj
+        <placeholder>
     </div>
 
 </div>
