@@ -42,7 +42,7 @@
 
 <div class = content>
     <div class = display>
-        <placeholder>
+        &gt;placeholder&lt;
     </div>
 
 </div>
