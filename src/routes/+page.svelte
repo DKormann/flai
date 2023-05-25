@@ -5,21 +5,23 @@
   import { swipe } from "svelte-gestures";
 
   import { onMount, onDestroy } from "svelte";
+    import Line from "./line.svelte";
 
   let counter = 0;
 
   const book = moby_dick;
 
-  let active_lines = [create_line(book.sentences[counter], book.translations)];
+
+  let active_lines = [book.sentences[counter]];
 
   function next() {
     counter = Math.min(counter + 1, book.sentences.length - 1);
-    active_lines = [create_line(book.sentences[counter], book.translations)];
+    active_lines = [book.sentences[counter]];
   }
 
   function back() {
     counter = Math.max(counter - 1, 0);
-    active_lines = [create_line(book.sentences[counter], book.translations)];
+    active_lines = [book.sentences[counter]];
   }
 
   function swipeHandler(event: any) {
@@ -37,7 +39,7 @@
   function create_line(txt: string, translations: Map<string, string>): string {
     for (const [original, translation] of translations) {
       if (txt.includes(original)) {
-        const arg = `<div class="tooltip tooltip-accent" data-tip="${original}"><span class="bg-primary bg-opacity-50 p-1 rounded-xl">${translation}</span></div>`;
+        const arg = `<div class="tooltip tooltip-accent" data-tip="${original}"><span class="bg-primary bg-opacity-50 p-1 rounded-xl">${translation} </span></div>`;
         txt = txt.replaceAll(original, arg);
       }
     }
@@ -46,17 +48,19 @@
   }
 </script>
 
-<div
+<!-- <div
   class="fixed h-screen w-screen"
   use:swipe={{ touchAction: "pan-y" }}
   on:swipe={swipeHandler}
-/>
+/> -->
+
 <div class="flex h-screen">
   <div class="m-auto">
     <div class="display text-center pb-20 p-10 text-3xl leading-loose">
       {#each active_lines as line (counter)}
         <div in:slide={{ duration: 1000 }}>
-          {@html line}
+          <!-- {@html line} -->
+          <Line txt={line} translations={book.translations} />
         </div>
       {/each}
     </div>
