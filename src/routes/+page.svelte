@@ -57,16 +57,6 @@
     })
 
 
-    function create_line(txt: string, translations: Map<string, string>): string {
-        for (const [original, translation] of translations) {
-            if (txt.includes(original)) {
-                const arg = `<div class="tooltip tooltip-accent" data-tip="${original}"><span class="bg-primary bg-opacity-50 p-1 rounded-xl">${translation} </span></div>`;
-                txt = txt.replaceAll(original, arg);
-            }
-        }
-
-        return txt;
-    }
 </script>
 
 <!-- <div
@@ -83,7 +73,7 @@
 
                 {#each active_sentence as line (index)}
                     <div in:slide={{ duration: 1000 }}>
-                        <Line txt={active_sentence[0]} translations={new Map([])} />
+                        <Line txt={active_sentence[0]} />
 
                     </div>
                 {/each}
