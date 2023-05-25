@@ -21,7 +21,7 @@ export var book:Book = new Book();
 
 export async function data_setup(){
 
-    const url = window.origin + "/booklist.json";
+    const url = window.location + "/booklist.json";
     console.log("url", url);
 
     return new Promise<void>((resolve, reject) => {
@@ -42,7 +42,7 @@ export async function choose_book(title:string){
 
   console.log("choose_book", title);
   
-  const url = window.origin + "/books/" + title + ".json";
+  const url = window.location + "/books/" + title + ".json";
   console.log("url", url);
 
   let resp = await fetch(url)
