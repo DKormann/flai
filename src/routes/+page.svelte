@@ -1,51 +1,61 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
-  import { moby_dick } from "./data";
-  import { slide } from "svelte/transition";
-  import { swipe } from "svelte-gestures";
+    import { fade } from "svelte/transition";
+    import { data_setup } from "./data";
+    import { slide } from "svelte/transition";
+    import { swipe } from "svelte-gestures";
 
-  import { onMount, onDestroy } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import Line from "./line.svelte";
 
-  let counter = 0;
+    let index = -1;
 
-  const book = moby_dick;
+    import {book} from "./data"
 
+    var active_sentence = ["palce"]
 
-  let active_lines = [book.sentences[counter]];
-
-  function next() {
-    counter = Math.min(counter + 1, book.sentences.length - 1);
-    active_lines = [book.sentences[counter]];
-  }
-
-  function back() {
-    counter = Math.max(counter - 1, 0);
-    active_lines = [book.sentences[counter]];
-  }
-
-  function swipeHandler(event: any) {
-    console.log(event.detail.direction);
-    const direction = event.detail.direction;
-    if (direction == "left") next();
-    else if (direction == "right") back();
-  }
-
-  onMount(()=>window.addEventListener("keydown",(event:KeyboardEvent)=>{
-    if ( event.key == "ArrowLeft" || event.key == "a") back()
-    else if (event.key == "ArrowRight" || event.key == "d") next()
-  }))
-
-  function create_line(txt: string, translations: Map<string, string>): string {
-    for (const [original, translation] of translations) {
-      if (txt.includes(original)) {
-        const arg = `<div class="tooltip tooltip-accent" data-tip="${original}"><span class="bg-primary bg-opacity-50 p-1 rounded-xl">${translation} </span></div>`;
-        txt = txt.replaceAll(original, arg);
-      }
+    function next(){
+        index = Math.min(book.sentences.length,index+1)
+        active_sentence = [book.sentences[index]]
     }
 
-    return txt;
-  }
+    function prev(){
+        index = Math.max(0,index-1)
+        active_sentence = [book.sentences[index]]
+    }
+
+    function swipeHandler(event: any) {
+        console.log(event.detail.direction);
+        const direction = event.detail.direction;
+        if (direction == "left") next();
+        else if (direction == "right") prev();
+    }
+
+    onMount(()=>{
+        window.addEventListener("keydown",(event:KeyboardEvent)=>{
+
+            if ( event.key == "ArrowLeft" || event.key == "a") prev()
+            else if (event.key == "ArrowRight" || event.key == "d") next()
+                
+        })
+
+        data_setup().then(()=>{
+
+            next()
+        })
+
+    })
+
+
+    function create_line(txt: string, translations: Map<string, string>): string {
+        for (const [original, translation] of translations) {
+            if (txt.includes(original)) {
+                const arg = `<div class="tooltip tooltip-accent" data-tip="${original}"><span class="bg-primary bg-opacity-50 p-1 rounded-xl">${translation} </span></div>`;
+                txt = txt.replaceAll(original, arg);
+            }
+        }
+
+        return txt;
+    }
 </script>
 
 <!-- <div
@@ -55,20 +65,26 @@
 /> -->
 
 <div class="flex h-screen">
-  <div class="m-auto">
-    <div class="display text-center pb-20 p-10 text-3xl leading-loose">
-      {#each active_lines as line (counter)}
-        <div in:slide={{ duration: 1000 }}>
-          <!-- {@html line} -->
-          <Line txt={line} translations={book.translations} />
+
+    {#if index!=-1}
+        <div class="m-auto">
+            <div class="display text-center pb-20 p-10 text-3xl leading-loose">
+
+                {#each active_sentence as line (index)}
+                    <div in:slide={{ duration: 1000 }}>
+                        <Line txt={active_sentence[0]} translations={new Map([])} />
+
+                    </div>
+                {/each}
+            </div>
+
         </div>
-      {/each}
-    </div>
-  </div>
+    {/if}
+
 </div>
 
 <div class="btm-nav">
-  <button on:click={back} disabled={counter === 0}
+  <button on:click={prev} disabled={index < 1}
     ><svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -84,7 +100,7 @@
       />
     </svg>
   </button>
-  <button on:click={next} disabled={counter === book.sentences.length - 1}
+  <button on:click={next} disabled={index >= book.sentences.length - 1}
     ><svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

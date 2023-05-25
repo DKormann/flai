@@ -14,8 +14,6 @@
 
   type translation = { original: string; translation: string };
 
-  console.log(translations.entries());
-
   function splitTranslations(txt: string): (string | translation)[] {
     var res: (string | translation)[] = [txt];
 
@@ -39,7 +37,6 @@
   }
 
   const result = splitTranslations(txt);
-  console.log(result);
 
   let openTooltipIndex = -1;
 
