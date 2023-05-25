@@ -4,6 +4,8 @@
   import { slide } from "svelte/transition";
   import { swipe } from "svelte-gestures";
 
+  import { onMount, onDestroy } from "svelte";
+
   let counter = 0;
 
   const book = moby_dick;
@@ -27,11 +29,16 @@
     else if (direction == "right") back();
   }
 
+  onMount(()=>window.addEventListener("keydown",(event:KeyboardEvent)=>{
+    if ( event.key == "ArrowLeft" || event.key == "a") back()
+    else if (event.key == "ArrowRight" || event.key == "d") next()
+  }))
+
   function create_line(txt: string, translations: Map<string, string>): string {
-    for (const [key, value] of translations) {
-      if (txt.includes(key)) {
-        const arg = `<div class="tooltip tooltip-accent" data-tip="${key}"><span class="bg-primary bg-opacity-50 p-1 rounded-xl">${value}</span></div>`;
-        txt = txt.replaceAll(key, arg);
+    for (const [original, translation] of translations) {
+      if (txt.includes(original)) {
+        const arg = `<div class="tooltip tooltip-accent" data-tip="${original}"><span class="bg-primary bg-opacity-50 p-1 rounded-xl">${translation}</span></div>`;
+        txt = txt.replaceAll(original, arg);
       }
     }
 
