@@ -34,7 +34,7 @@
         window.addEventListener("keydown",(event:KeyboardEvent)=>{
 
             if ( event.key == "ArrowLeft" || event.key == "a") prev()
-            else if (event.key == "ArrowRight" || event.key == "d") next()
+            else if (event.key == "ArrowRight" || event.key == "d" || event.key==" ") next()
                 
         })
 
@@ -84,36 +84,42 @@
 </div>
 
 <div class="btm-nav">
-  <button on:click={prev} disabled={index < 1}
-    ><svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      class="w-6 h-6"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-      />
-    </svg>
-  </button>
-  <button on:click={next} disabled={index >= book.sentences.length - 1}
-    ><svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      class="w-6 h-6"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-      />
-    </svg>
-  </button>
+    <button on:click={prev} disabled={index < 1}
+        ><svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6"
+        >
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+        />
+        </svg>
+    </button>
+
+    <!-- <input type="number" min="1" max={book.sentences.length} bind:value={index} class="page-input" /> -->
+
+    <span class="text-xl">{index+1}/{book.sentences.length}</span>
+    <span class="text-xl">{book.title.replaceAll("_"," ")}</span>
+
+    <button on:click={next} disabled={index >= book.sentences.length - 1}
+        ><svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6"
+        >
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+        />
+        </svg>
+    </button>
 </div>
