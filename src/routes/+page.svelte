@@ -4,8 +4,10 @@
     import { slide } from "svelte/transition";
     import { swipe } from "svelte-gestures";
 
-    import { onMount, onDestroy } from "svelte";
+    import { onMount, onDestroy, tick } from "svelte";
     import Line from "./line.svelte";
+    import { precache } from "./translator";
+
 
     let index = -1;
 
@@ -19,6 +21,9 @@
     function next(){
         index = Math.min(book.sentences.length,index+1)
         active_sentence = [book.sentences[index]]
+        tick().then(()=>{
+            precache(book.sentences[index+1])
+        })
     }
 
     function prev(){
@@ -72,9 +77,8 @@
             <div class="display text-center pb-20 p-10 text-3xl leading-loose">
 
                 {#each active_sentence as line (index)}
-                    <div in:slide={{ duration: 1000 }}>
+                    <div in:slide={{ duration: 10 }}>
                         <Line txt={active_sentence[0]} />
-
                     </div>
                 {/each}
             </div>
