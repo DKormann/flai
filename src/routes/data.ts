@@ -1,34 +1,20 @@
 
 
-export class Book {
-
-  public sentences: string[];
-  public title: string;
-
-  constructor(){
-    this.sentences = [""]
-    this.title = "";
-  }
-
-  public build(title:string,sentences:string[]){
-    this.sentences = sentences;
-    this.title = title;
-  }
-
+var book = {
+  title: "",
+  sentences: [],
 }
-
-export var book:Book = new Book();
 
 export async function data_setup(){
 
     const url = window.location + "/booklist.json";
 
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<{title:string, sentences:string[]}>((resolve, reject) => {
     
       fetch(url).then((resp) => {
         resp.json().then(async (data) => {
           await choose_book(data[0]);
-          resolve()
+          resolve(book)
         });
       });
     });
@@ -41,6 +27,7 @@ export async function choose_book(title:string){
   let resp = await fetch(url)
   let data = await resp.json()
 
-  book.build(title,data);
+  book.title = title
+  book.sentences = data
 
 } 

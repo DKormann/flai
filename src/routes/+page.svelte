@@ -9,17 +9,12 @@
 
     let index = -1;
 
-    let user_index = 1;
+    var book = {
+        title: "",
+        sentences: [""],
+    };
 
-    function user_index_change(){
-        if (user_index == null)return 
-        index = user_index-1
-        active_sentence = [book.sentences[index]]
-    }
-
-    import {book} from "./data"
-
-    var active_sentence = ["palce"]
+    var active_sentence = [""]
 
     function next(){
         index = Math.min(book.sentences.length,index+1)
@@ -31,6 +26,14 @@
         active_sentence = [book.sentences[index]]
     }
 
+    let user_index = 1;
+
+    function user_index_change(){
+        if (user_index == null)return 
+        index = user_index-1
+        active_sentence = [book.sentences[index]]
+    }
+    
     function swipeHandler(event: any) {
         console.log(event.detail.direction);
         const direction = event.detail.direction;
@@ -46,8 +49,8 @@
                 
         })
 
-        data_setup().then(()=>{
-
+        data_setup().then((res:{title:string, sentences:string[]})=>{
+            book = res
             next()
         })
 
