@@ -9,6 +9,14 @@
 
     let index = -1;
 
+    let user_index = 1;
+
+    function user_index_change(){
+        if (user_index == null)return 
+        index = user_index-1
+        active_sentence = [book.sentences[index]]
+    }
+
     import {book} from "./data"
 
     var active_sentence = ["palce"]
@@ -101,9 +109,9 @@
         </svg>
     </button>
 
-    <!-- <input type="number" min="1" max={book.sentences.length} bind:value={index} class="page-input" /> -->
-
+    
     <span class="text-xl">{index+1}/{book.sentences.length}</span>
+    <input type="number" min="1" max={book.sentences.length} bind:value={user_index} on:input={user_index_change} class="page-input" />
     <span class="text-xl">{book.title.replaceAll("_"," ")}</span>
 
     <button on:click={next} disabled={index >= book.sentences.length - 1}
