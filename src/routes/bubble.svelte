@@ -1,21 +1,21 @@
 <script lang="ts">
-  export var data: { translation: string; original: string };
+  export let data: { translation: string; original: string };
+  export let index: number;
+  export let openTooltipIndex: number;
+  export let toggleTooltip: (index: number) => void;
 
-  var opened = false;
-
-  function toggle() {
-    console.log("toggle");
-
-    opened = !opened;
-  }
+  import { fade } from "svelte/transition";
 </script>
 
-<button class="text-primary" on:click={toggle}>
-  {#if opened}
-    <div class="tooltip" data-tip={data.original}>
-      {data.translation}
+<button class="text-primary relative" on:click={() => toggleTooltip(index)}>
+  {data.translation}
+
+  {#if openTooltipIndex === index}
+    <div
+      class="absolute mt-1 p-1 px-4 z-10 bg-gray-700 bg-opacity-80 rounded shadow-md"
+      transition:fade
+    >
+      {data.original}
     </div>
-  {:else}
-    {data.translation}
   {/if}
 </button>

@@ -1,66 +1,59 @@
+<script lang="ts">
+  import { bubble, text } from "svelte/internal";
+  import Bubble from "./bubble.svelte";
 
-<script lang='ts'>
-    import { bubble, text } from "svelte/internal";
-    import Bubble from "./bubble.svelte";
+  /**
+   * @type {string}
+   */
+  export var txt: string;
 
+  /**
+   * @type {Map<string, string>}
+   */
+  export var translations: Map<string, string>;
 
-    /**
-     * @type {string}
-     */
-     export var txt:string;
+  type translation = { original: string; translation: string };
 
-    /**
-     * @type {Map<string, string>}
-     */
-    export var translations:Map<string, string>;
+  console.log(translations.entries());
 
-    type translation = {original:string, translation:string}
+  function splitTranslations(txt: string): (string | translation)[] {
+    var res: (string | translation)[] = [txt];
 
-    console.log(translations.entries());
-    
+    translations.forEach((translation, original) => {
+      var new_res: (string | translation)[] = [];
 
-    function splitTranslations(txt:string):(string|translation)[] {
-        var res:(string|translation)[] = [txt]
+      res.forEach((part) => {
+        if (typeof part == "string" && part.includes(original)) {
+          var splits = part.split(original);
+          new_res.push(splits[0]);
+          new_res.push({ translation, original });
+          new_res.push(splits[1]);
+        } else {
+          new_res.push(part);
+        }
+      });
+      res = new_res;
+    });
 
-        translations.forEach((translation, original) => {
+    return res;
+  }
 
-            var new_res:(string|translation)[] = []
+  const result = splitTranslations(txt);
+  console.log(result);
 
-            res.forEach(part=>{
-                if(typeof(part)=="string" && part.includes(original)){
+  let openTooltipIndex = -1;
 
-                    var splits = part.split(original)
-                    new_res.push(splits[0])
-                    new_res.push({translation,original})
-                    new_res.push(splits[1])
-                    
-                }else{
-                    new_res.push(part)
-                }
-            })
-            res = new_res
-        })
-
-        return res
-    }
-
-
-    const result = splitTranslations(txt);
-    console.log(result);
-
-
+  let toggleTooltip = (index: number) => {
+    openTooltipIndex = openTooltipIndex === index ? -1 : index;
+  };
 </script>
 
-
 <p>
-
-    {#each result as part}
-        {#if (typeof(part)=="string")}
-            {part}
-        {:else}
-            <Bubble data={part}/>
-        {/if}
-
-    {/each }
-
+  {#each result as part, index}
+    {#if typeof part == "string"}
+      {part}
+    {:else}
+      <Bubble data={part} {index} {openTooltipIndex} {toggleTooltip} />
+    {/if}
+  {/each}
 </p>
