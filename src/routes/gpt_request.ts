@@ -1,4 +1,4 @@
-const apikey = "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"
+const apikey = "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"
 
 export async function gpt_request(prompt:string){
 
