@@ -149,7 +149,7 @@ async function load_first_book(): Promise<Book> {
  * @returns {string[]}
  */
 async function load_booklist(): Promise<string[]> {
-  const url = "/booklist.json";
+  const url = "./booklist.json";
 
   const response = await fetch(url);
   const data = await response.json();
@@ -164,7 +164,7 @@ async function load_booklist(): Promise<string[]> {
  * @returns {Book}
  */
 async function load_book(title: string): Promise<Book> {
-  const url = "/books/" + title + ".json";
+  const url = "./books/" + title + ".json";
 
   let resp = await fetch(url);
   let data = await resp.json();
@@ -183,7 +183,7 @@ async function load_book(title: string): Promise<Book> {
  * @returns {string[]}
  */
 async function load_language(lang: string): Promise<string[]> {
-  const url = `/langs/${lang}.json`;
+  const url = `./langs/${lang}.json`;
 
   const response = await fetch(url);
   const data = await response.json();
