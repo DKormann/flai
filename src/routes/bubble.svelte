@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onDestroy } from "svelte";
+  import { onDestroy } from "svelte";
 
   export let data: { translation: string; original: string };
   export let index: number;
@@ -7,14 +7,11 @@
   export let toggleTooltip: (index: number) => void;
 
   import { fade } from "svelte/transition";
-    import { feedback } from "./translator";
 
-
-  function on_click(){
-    toggleTooltip(index)
-    feedback(data.translation, data.original,false)
+  function on_click() {
+    toggleTooltip(index);
+    //feedback(data.translation, data.original,false)
   }
-
 </script>
 
 <button class="text-primary relative" on:click={on_click}>
