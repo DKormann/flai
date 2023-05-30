@@ -1,0 +1,11 @@
+
+[
+    {
+        "origin_language":"en",
+        "target_languages":[
+            {
+                "de":["moby_dick"]
+            }
+        ]
+    }
+]
