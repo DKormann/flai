@@ -2,9 +2,10 @@
 [
     {
         "origin_language":"en",
-        "target_languages":[
-            {
-                "de":["moby_dick"]
+        "targets":[
+            {   
+                "language":"de",
+                "books":["moby_dick"]
             }
         ]
     }

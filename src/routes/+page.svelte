@@ -1,62 +1,98 @@
 <script lang="ts">
-  import { slide } from "svelte/transition";
-  import { onMount } from "svelte";
+    import { slide } from "svelte/transition";
+    import { onMount } from "svelte";
 
-  import Line from "./line.svelte";
-  import {
-    load_and_translate_first_book,
-    type Book,
-    type Sentence,
-  } from "./translator";
+    import Line from "./line.svelte";
+    // import {
+	// 	load_and_translate_first_book,
+	// 	type Book,
+	// 	type Sentence,
+    // } from "./translator";
 
-  let book: Book = { title: "", sentences: [] };
+    import { data_setup, load_book, type Inventory, type BookData, type Book } from "./data_connector"
+    import BookPicker from "./book_picker.svelte";
+    import Educator from "./educator.svelte";
 
-  let sentence_index = -1;
-  let active_sentence: Sentence[] = [[""]];
+    let book: Book | null = null
 
-  let user_index = 1;
+    let sentence_index = -1;
+    // let active_sentence: Sentence[] = [[""]];
 
-  function next() {
-    sentence_index = Math.min(book.sentences.length, sentence_index + 1);
-    active_sentence = [book.sentences[sentence_index]];
+    let user_index = 1;
 
-    user_index = sentence_index + 1;
-  }
+	let inventory :Inventory
+	let show_inventory = false
 
-  function prev() {
-    sentence_index = Math.max(0, sentence_index - 1);
-    active_sentence = [book.sentences[sentence_index]];
+    function next() {
+    //   sentence_index = Math.min(book.sentences.length, sentence_index + 1);
+    //   active_sentence = [book.sentences[sentence_index]];
 
-    user_index = sentence_index + 1;
-  }
+    //   user_index = sentence_index + 1;
+    }
 
-  function user_index_change() {
-    if (user_index == null) return;
-    sentence_index = user_index - 1;
-    active_sentence = [book.sentences[sentence_index]];
-  }
+    function prev() {
+    //   sentence_index = Math.max(0, sentence_index - 1);
+    //   active_sentence = [book.sentences[sentence_index]];
 
-  function swipeHandler(event: any) {
-    console.log(event.detail.direction);
-    const direction = event.detail.direction;
-    if (direction == "left") next();
-    else if (direction == "right") prev();
-  }
+    //   user_index = sentence_index + 1;
+    }
 
-  onMount(async () => {
-    window.addEventListener("keydown", (event: KeyboardEvent) => {
-      if (event.key == "ArrowLeft" || event.key == "a") prev();
-      else if (
-        event.key == "ArrowRight" ||
-        event.key == "d" ||
-        event.key == " "
-      )
-        next();
+    function user_index_change() {
+    //   if (user_index == null) return;
+    //   sentence_index = user_index - 1;
+    //   active_sentence = [book.sentences[sentence_index]];
+    }
+
+    function swipeHandler(event: any) {
+
+      const direction = event.detail.direction;
+      if (direction == "left") next();
+      else if (direction == "right") prev();
+    }
+
+    onMount(async () => {
+
+      data_setup().then((data) => {
+
+		inventory = data
+		show_inventory = true
+
+	  })
+
+      window.addEventListener("keydown", (event: KeyboardEvent) => {
+        if (event.key == "ArrowLeft" || event.key == "a") prev();
+        else if (["ArrowRight","d"," "].includes(event.key))
+          next();
+      });
+
+    //   book = await load_and_translate_first_book("english", "spanish");
+    //   next();
+
+
     });
 
-    book = await load_and_translate_first_book("english", "spanish");
-    next();
-  });
+	let preferences = {
+		native_language: "",
+		learning_language: "",
+		title: ""
+	}
+
+	let switched = false
+
+	function settopic(native:string, learning:string, title:string){
+
+		show_inventory = false
+		preferences = {
+			native_language: native,
+			learning_language: learning,
+			title: title
+		}
+
+		console.log("preferences",preferences);
+
+		load_book(native,learning,title).then(b=>book = b)
+		
+	}
 </script>
 
 <!-- <div
@@ -65,7 +101,7 @@
   on:swipe={swipeHandler}
 /> -->
 
-<div class="flex h-screen">
+<!-- <div class="flex h-screen">
   {#if sentence_index != -1}
     <div class="m-auto">
       <div class="display text-center pb-20 p-10 text-3xl leading-loose">
@@ -77,9 +113,24 @@
       </div>
     </div>
   {/if}
-</div>
+</div> -->
 
+{#if book != null}
+	<Educator book = {book}></Educator>
+{/if}
+
+{#if show_inventory}
+	<BookPicker inventory = {inventory} callback = {settopic}></BookPicker>
+{/if}
+
+<dialog id="myDialog">
+    <h2>Dialog Box</h2>
+    <p>This is a sample dialog box.</p>
+    <button>Close</button>
+  </dialog>
+<!-- 
 <div class="btm-nav">
+
   <button on:click={prev} disabled={sentence_index < 1}
     ><svg
       xmlns="http://www.w3.org/2000/svg"
@@ -126,4 +177,4 @@
       />
     </svg>
   </button>
-</div>
+</div> -->
