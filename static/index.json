@@ -1,0 +1,12 @@
+
+[
+    {
+        "origin_language":"en",
+        "targets":[
+            {   
+                "language":"de",
+                "books":["moby_dick"]
+            }
+        ]
+    }
+]

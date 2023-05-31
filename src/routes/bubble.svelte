@@ -5,12 +5,14 @@
   export let index: number;
   export let openTooltipIndex: number;
   export let toggleTooltip: (index: number) => void;
+  export let fail:()=>void;
 
   import { fade } from "svelte/transition";
 
   function on_click() {
     toggleTooltip(index);
     //feedback(data.translation, data.original,false)
+    fail()
   }
 </script>
 
