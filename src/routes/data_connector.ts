@@ -10,6 +10,9 @@ export type Inventory = {
 export async function data_setup():Promise<Inventory>{
     const url = "./index.json"
 
+    console.log("Fetching data from", url);
+    
+
     const response = await fetch(url)
     const data = await response.json() as Inventory
 
