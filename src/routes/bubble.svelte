@@ -21,7 +21,7 @@
 
   {#if openTooltipIndex === index}
     <div
-      class="absolute mt-1 p-1 px-4 z-10 bg-gray-700 bg-opacity-100 rounded shadow-md"
+      class="absolute text-white mt-1 p-1 px-4 z-10 bg-gray-700 bg-opacity-100 rounded shadow-md"
       transition:fade
     >
       {data.original}

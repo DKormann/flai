@@ -1,10 +1,17 @@
+import { browser } from "$app/environment"
 
 
 var set_up = false
 
-var seen = new Set<string>()
-var known = new Set<string>()
+var vocab_status = new Map<string,string>()
 
+if(browser){
+
+    const status = localStorage.getItem("vocab_status")
+    if (status){
+        vocab_status = new Map(JSON.parse(status))
+    }
+}
 
 export class Challenge{
     public vocabs:Set<[string,string]>
@@ -15,20 +22,15 @@ export class Challenge{
     
     fail(vocab:[string,string]){
 
-        if (!seen.has(JSON.stringify(vocab))){
+        if (!vocab_status.has(JSON.stringify(vocab))){
             console.error("You failed a vocab you haven't seen yet", vocab);
-            console.log("seen", seen);
-            
         }
-        seen.add(JSON.stringify(vocab))
-        known.delete(JSON.stringify(vocab))
-        this.vocabs.delete(vocab)
     }
 
     finish(){
         this.vocabs.forEach(vocab=>{
-            known.add(JSON.stringify(vocab))
-            seen.delete(JSON.stringify(vocab))
+            // vocab_status.set(JSON.stringify(vocab),"known")
+            set_known(JSON.stringify(vocab),"known")
         })
     }
 }
@@ -38,17 +40,13 @@ const challenge_interval = 20
 export function create_challenge(data:(string|[string,string])[]){
 
     var challenge_level = Math.floor(Math.random()*3)
-    console.log("create_challenge", data);
-    
 
     data = data.map(item=>{
         if (typeof item === "string"){
             return item
         }else{
             const [native, target] = item
-            if (known.has(JSON.stringify([native,target]))){
-                console.log("known", native, target);
-                
+            if (vocab_status.get(JSON.stringify([native,target]))==="known"){
                 return [native, target]
             }else{
                 if (challenge_level > 0){
@@ -57,14 +55,26 @@ export function create_challenge(data:(string|[string,string])[]){
                 }else{
 
                     challenge_level = challenge_interval
-                    seen.add(JSON.stringify([native,target]))
+                    // seen.add(JSON.stringify([native,target]))
+
+                    set_known(JSON.stringify([native,target]),"seen")
+
                     return [native, target]
                 }
             }
         }
     })
-    console.log(data);
     
     return new Challenge(data)
+}
+
+function set_known (key:string, value:string){
+    vocab_status.set(key,value)
+    localStorage.setItem("vocab_status",JSON.stringify([...vocab_status]))
+}
+
+export function clear(){
+    vocab_status.clear()
+    delete localStorage["vocab_status"]
 }
 

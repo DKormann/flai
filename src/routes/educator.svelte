@@ -5,8 +5,16 @@
     import { Challenge, create_challenge } from "./translator";
 
     export var book: Book;
+    export var change_book: () => void;
+    export var index: number;
+    export var set_page: (page: number) => void;
 
-    let index = 1;
+    $: console.log("book:",book.switched);
+
+    $: if (index != -1){
+        index_change()
+    }
+    
 
     let active_sentence: Challenge
     index_change()
@@ -23,11 +31,16 @@
 
 
     function index_change(){
+        
         active_sentence?.finish()
-        active_sentence = create_challenge(book.data[index-1][1]);
+        active_sentence = create_challenge(book.data[index-1][book.switched ? 1:0]);
+        set_page(index)
     }
 
-
+    window.addEventListener("keydown", (event: KeyboardEvent) => {
+        if (event.key == "ArrowLeft" || event.key == "a") prev();
+        else if (["ArrowRight","d"," "].includes(event.key)) next();
+    });
 
 </script>
 
@@ -36,7 +49,6 @@
     <Line challenge={active_sentence} />
 
 </div>
-
 
 
 <div class="btm-nav">
@@ -69,7 +81,8 @@
       />
       <div class="text-xl">/{book.data.length}</div>
     </div>
-    <span class="text text-center">{book.title.replaceAll("_", " ")}</span>
+
+    <button on:click={change_book} class="text text-center">{book.title.replaceAll("_", " ")}</button>
   
     <button on:click={next} disabled={index >= book.data.length - 1}
       ><svg

@@ -5,7 +5,29 @@
         "targets":[
             {   
                 "language":"de",
-                "books":["moby_dick"]
+                "books":["mobydick"]
+            }
+        ]
+    },
+    {
+        "origin_language":"de",
+        "targets":[
+            {   
+                "language":"en",
+                "books":["mobydick"]
+            },
+            {   
+                "language":"ru",
+                "books":["mobydick"]
+            }
+        ]
+    },
+    {
+        "origin_language":"ru",
+        "targets":[
+            {   
+                "language":"de",
+                "books":["mobydick"]
             }
         ]
     }
