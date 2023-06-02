@@ -1,8 +1,9 @@
+import type { lang } from "./ui_versions";
 
 export type Inventory = {
-    origin_language:string,
+    origin_language:lang,
     targets:{
-        language:string,
+        language:lang,
         books:string[]
     }[]
 }[]

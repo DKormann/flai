@@ -20,6 +20,9 @@
     index_change()
 
     function next(){
+
+        console.log("next index");
+        
         index = Math.min(book.data.length+1, index + 1);
         index_change()
     }
@@ -31,13 +34,15 @@
 
 
     function index_change(){
+        if (index == null || index == -1) return;
+        console.log("index:",index);
         
         active_sentence?.finish()
         active_sentence = create_challenge(book.data[index-1][book.switched ? 1:0]);
         set_page(index)
     }
 
-    window.addEventListener("keydown", (event: KeyboardEvent) => {
+    window.addEventListener( "keyup" , (event: KeyboardEvent) => {
         if (event.key == "ArrowLeft" || event.key == "a") prev();
         else if (["ArrowRight","d"," "].includes(event.key)) next();
     });
