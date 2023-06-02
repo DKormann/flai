@@ -19,11 +19,24 @@
             {   
                 "language":"ru",
                 "books":["mobydick"]
+            },
+            {
+                "language":"tr",
+                "books":["mobydick"]
             }
         ]
     },
     {
         "origin_language":"ru",
+        "targets":[
+            {   
+                "language":"de",
+                "books":["mobydick"]
+            }
+        ]
+    },
+    {
+        "origin_language":"tr",
         "targets":[
             {   
                 "language":"de",

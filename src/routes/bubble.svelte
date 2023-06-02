@@ -17,14 +17,19 @@
 </script>
 
 <button class="text-primary relative" on:click={on_click}>
-  {data.translation}
-
+  
   {#if openTooltipIndex === index}
+    <span class="text-secondary">
+        {data.translation}
+    </span>
     <div
-      class="absolute text-white mt-1 p-1 px-4 z-10 bg-gray-700 bg-opacity-100 rounded shadow-md"
-      transition:fade
+    class="absolute text-white mt-1 p-1 px-4 z-10 bg-gray-700 bg-opacity-100 rounded shadow-md"
+
     >
-      {data.original}
+    {data.original}
     </div>
+  {:else}
+    {data.translation}
   {/if}
+
 </button>
