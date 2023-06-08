@@ -74,6 +74,11 @@
               <Bubble data={{original:part[1],translation:part[0],active:part[2]}} {index} {openTooltipIndex} {toggleTooltip} fail={()=>active_sentence.fail([part[0],part[1]])} />
           {/if}
         {/each}
+
+        <br><br>
+
+      <button class="text-primary font-semibold rounded px-4 py-0" on:click={switch_lang}>translate all</button>
+
       {:else}
         {#each create_no_challenge(book.data[index-1][book.switched ? 0:1]).data as part, index}
           {#if typeof part == "string"}
@@ -82,11 +87,12 @@
               <Bubble data={{original:part[0],translation:part[1],active:part[2]}} {index} {openTooltipIndex} {toggleTooltip} fail={()=>active_sentence.fail([part[0],part[1]])} />
           {/if}
         {/each}
+        <br><br>
+        <button class="text-primary font-semibold rounded px-4 py-0" on:click={switch_lang}>switch back</button>
       {/if}
       <br>
       <br>
 
-      <button class="text-primary font-semibold rounded px-4 py-0" on:click={switch_lang}>translate all</button>
     </p>
 
 
