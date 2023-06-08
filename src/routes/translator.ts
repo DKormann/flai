@@ -15,9 +15,9 @@ if(browser){
 
 export class Challenge{
     public vocabs:Set<[string,string]>
-    constructor(public data:(string|[string,string])[]){
+    constructor(public data:(string|[string,string,boolean])[]){
         this.data = data
-        this.vocabs = new Set<[string,string]> (data.filter(item=>typeof item !== "string")as [string,string][])
+        this.vocabs = new Set<[string,string]> (data.filter(item=>typeof item !== "string").map(x=>[x[0],x[1]])as [string,string][])
     }
     
     fail(vocab:[string,string]){
@@ -37,21 +37,23 @@ export class Challenge{
 
 const challenge_interval = 20
 
+
+
 export function create_challenge(data:(string|[string,string])[]){
 
     var challenge_level = Math.floor(Math.random()*3)
 
-    data = data.map(item=>{
+    const res:(string|[string,string,boolean])[] = data.map(item=>{
         if (typeof item === "string"){
             return item
         }else{
             const [native, target] = item
             if (vocab_status.get(JSON.stringify([native,target]))==="known"){
-                return [native, target]
+                return [native, target,true]
             }else{
                 if (challenge_level > 0){
                     challenge_level -= 1
-                    return target
+                    return [target,native,false]
                 }else{
 
                     challenge_level = challenge_interval
@@ -59,14 +61,28 @@ export function create_challenge(data:(string|[string,string])[]){
 
                     set_known(JSON.stringify([native,target]),"seen")
 
-                    return [native, target]
+                    return [native, target, true]
                 }
             }
         }
     })
     
-    return new Challenge(data)
+    return new Challenge(res)
 }
+
+export function create_no_challenge(data:(string|[string,string])[]){
+    const res:(string|[string,string,boolean])[] = data.map(item=>{
+        if (typeof item === "string"){
+            return item
+        }else{
+            const [native, target] = item
+            return [native, target, true]
+        }
+    })
+    
+    return new Challenge(res)
+}
+
 
 function set_known (key:string, value:string){
     vocab_status.set(key,value)

@@ -1,7 +1,7 @@
 <script lang="ts">
   import Bubble from "./bubble.svelte";
-    import type { LineData } from "./data_connector";
-    import type { Challenge } from "./translator";
+
+  import type { Challenge } from "./translator";
 
 
   export let challenge: Challenge;
@@ -18,7 +18,7 @@
     {#if typeof part == "string"}
       {part}
     {:else}
-      <Bubble data={{original:part[1],translation:part[0]}} {index} {openTooltipIndex} {toggleTooltip} fail={()=>challenge.fail([part[0],part[1]])} />
+      <Bubble data={{original:part[1],translation:part[0],active:part[2]}} {index} {openTooltipIndex} {toggleTooltip} fail={()=>challenge.fail([part[0],part[1]])} />
     {/if}
   {/each}
 </p>

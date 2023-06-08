@@ -1,8 +1,9 @@
 
 <script lang="ts">
-    import type { Book } from "./data_connector";
-    import Line from "./line.svelte";
-    import { Challenge, create_challenge } from "./translator";
+    import Bubble from "./bubble.svelte";
+    import type { Book, load_book } from "./data_connector";
+
+    import { Challenge, create_challenge, create_no_challenge } from "./translator";
 
     export var book: Book;
     export var change_book: () => void;
@@ -20,9 +21,8 @@
     index_change()
 
     function next(){
-
-        console.log("next index");
         
+        active_sentence?.finish()
         index = Math.min(book.data.length+1, index + 1);
         index_change()
     }
@@ -32,14 +32,21 @@
         index_change()
     }
 
+    var openTooltipIndex = -1;
+
+    function toggleTooltip(index: number) {
+        openTooltipIndex = openTooltipIndex === index ? -1 : index;
+    }
+
 
     function index_change(){
         if (index == null || index == -1) return;
         console.log("index:",index);
         
-        active_sentence?.finish()
         active_sentence = create_challenge(book.data[index-1][book.switched ? 1:0]);
         set_page(index)
+        openTooltipIndex = -1;
+        lang_switched = false
     }
 
     window.addEventListener( "keyup" , (event: KeyboardEvent) => {
@@ -47,11 +54,41 @@
         else if (["ArrowRight","d"," "].includes(event.key)) next();
     });
 
+    var lang_switched = false
+
+    function switch_lang(){
+        lang_switched = !lang_switched
+    }
+
+
 </script>
 
 <div class="flex h-screen">
     
-    <Line challenge={active_sentence} />
+    <p class="m-auto display text-center pb-20 p-10 text-3xl leading-loose">
+      {#if !lang_switched}
+        {#each active_sentence.data as part, index}
+          {#if typeof part == "string"}
+              {part}
+          {:else}
+              <Bubble data={{original:part[1],translation:part[0],active:part[2]}} {index} {openTooltipIndex} {toggleTooltip} fail={()=>active_sentence.fail([part[0],part[1]])} />
+          {/if}
+        {/each}
+      {:else}
+        {#each create_no_challenge(book.data[index-1][book.switched ? 0:1]).data as part, index}
+          {#if typeof part == "string"}
+              {part}
+          {:else}
+              <Bubble data={{original:part[0],translation:part[1],active:part[2]}} {index} {openTooltipIndex} {toggleTooltip} fail={()=>active_sentence.fail([part[0],part[1]])} />
+          {/if}
+        {/each}
+      {/if}
+      <br>
+      <br>
+
+      <button class="text-primary font-semibold rounded px-4 py-0" on:click={switch_lang}>translate all</button>
+    </p>
+
 
 </div>
 
