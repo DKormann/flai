@@ -86,7 +86,7 @@
       <br>
       <br>
 
-      <button class="text-primary font-semibold rounded px-4 py-0" on:click={switch_lang}>switch</button>
+      <button class="text-primary font-semibold rounded px-4 py-0" on:click={switch_lang}>translate all</button>
     </p>
 
 
