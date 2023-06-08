@@ -17,7 +17,7 @@
   }
 </script>
 
-<button class={data.active?"text-primary": "text-[#eea]" +" relative"} on:click={on_click}>
+<button class={data.active?"text-primary": "text-current italic" +" relative"} on:click={on_click}>
   
   {#if openTooltipIndex === index}
     <span class="text-secondary">
