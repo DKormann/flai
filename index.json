@@ -23,6 +23,10 @@
             {
                 "language":"tr",
                 "books":["mobydick"]
+            },
+            {
+                "language":"es",
+                "books":["mobydick"]
             }
         ]
     },
@@ -37,6 +41,15 @@
     },
     {
         "origin_language":"tr",
+        "targets":[
+            {   
+                "language":"de",
+                "books":["mobydick"]
+            }
+        ]
+    },
+    {
+        "origin_language":"es",
         "targets":[
             {   
                 "language":"de",
